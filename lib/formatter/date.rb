@@ -104,7 +104,7 @@ module Formatter
     end
 
     def format_method?(method)
-      %i(iso8601 xmlschema jisx0301 rfc3339).include? method
+      %w(iso8601 xmlschema jisx0301 rfc3339).include? method.to_s
     end
 
     def with_offset(time_or_datetime)
