@@ -3,15 +3,17 @@
 require_relative 'test_helper'
 
 class IntegrationTest < Minitest::Test
-  attr_reader :time_zone, :format
+  attr_reader :clock, :formatter, :time_zone, :format
 
   def setup
+    @clock = Time.new 2010, 1, 1, 10, 0, 0, '+00:00'
+
     @time_zone = 'Europe/Stockholm'
     @format = :iso8601
   end
 
   def formatter
-    Formatter::Date.new time_zone, format
+    @formatter ||= Formatter::Date.new time_zone, format
   end
 
   def test_can_initialize_with_string
@@ -54,55 +56,40 @@ class IntegrationTest < Minitest::Test
   end
 
   def test_offset
-    assert_equal Rational(1, 24), formatter.offset
+    Time.stub :now, clock do
+      assert_equal Rational(1, 24), formatter.offset
+    end
   end
 
   def test_formats_time_with_offset
     input = Time.new(2010, 1, 1, 10, 0, 0, '+00:00')
-
-    expected = '2010-01-01T11:00:00+01:00'
-    actual = formatter.format input
-
-    assert_equal expected, actual
+    assert_format '2010-01-01T11:00:00+01:00', input
   end
 
   def test_formats_datetime_with_offset
     input = DateTime.new(2010, 1, 1, 10, 0, 0, Rational(0, 24))
-
-    expected = '2010-01-01T11:00:00+01:00'
-    actual = formatter.format input
-
-    assert_equal expected, actual
+    assert_format '2010-01-01T11:00:00+01:00', input
   end
 
   def test_defaults_format_to_iso8601
-    formatter = Formatter::Date.new time_zone
+    @formatter = Formatter::Date.new time_zone
     input = Time.new(2010, 1, 1, 10, 0, 0, '+00:00')
 
-    expected = '2010-01-01T11:00:00+01:00'
-    actual = formatter.format input
-
-    assert_equal expected, actual
+    assert_format '2010-01-01T11:00:00+01:00', input
   end
 
   def test_format_with_fractional_seconds
-    formatter = Formatter::Date.new time_zone, :iso8601, 2
+    @formatter = Formatter::Date.new time_zone, :iso8601, 2
     input = Time.new(2010, 1, 1, 10, 0, 0, '+00:00')
 
-    expected = '2010-01-01T11:00:00.00+01:00'
-    actual = formatter.format input
-
-    assert_equal expected, actual
+    assert_format '2010-01-01T11:00:00.00+01:00', input
   end
 
   def test_format_with_custom_string
     @format = '%Y%m%dT%H%M%S%z'
     input = Time.new(2010, 1, 1, 10, 0, 0, '+00:00')
 
-    expected = '20100101T110000+0100'
-    actual = formatter.format input
-
-    assert_equal expected, actual
+    assert_format '20100101T110000+0100', input
   end
 
   %w(iso8601 xmlschema jisx0301 rfc3339).each do |format|
@@ -124,5 +111,12 @@ class IntegrationTest < Minitest::Test
     end
 
     assert_includes error.message, '"invalid time"'
+  end
+
+  def assert_format(expected, input)
+    Time.stub :now, clock do
+      actual = formatter.format input
+      assert_equal expected, actual
+    end
   end
 end
