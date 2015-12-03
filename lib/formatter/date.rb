@@ -94,10 +94,10 @@ module Formatter
       case format
       when Symbol
         if format_method? format
-          return -> datetime { datetime.send format, fraction }
+          return ->(datetime) { datetime.send format, fraction }
         end
       when String
-        return -> datetime { datetime.strftime format }
+        return ->(datetime) { datetime.strftime format }
       end
 
       fail ArgumentError, "invalid value for format: #{format.inspect}"
