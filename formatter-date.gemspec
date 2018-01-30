@@ -1,4 +1,3 @@
-# encoding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'formatter/date/version'
@@ -16,15 +15,15 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files`.split($RS)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  spec.require_paths = %w(lib)
-  spec.extra_rdoc_files = %w(LICENSE README.md)
+  spec.require_paths = %w[lib]
+  spec.extra_rdoc_files = %w[LICENSE README.md]
 
-  spec.required_ruby_version = '>= 1.9.3'
+  spec.required_ruby_version = '>= 2.1'
 
   spec.add_runtime_dependency 'tzinfo', '~> 1.2.2'
 
   spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'minitest', '~> 5.8'
-  spec.add_development_dependency 'rubocop', '~> 0.35'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rubocop', '~> 0.52'
 end

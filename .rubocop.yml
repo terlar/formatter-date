@@ -1,16 +1,22 @@
+---
 AllCops:
   Exclude:
     - 'bin/**/*'
     - 'vendor/**/*'
   DisplayCopNames: true
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 
 Style/Documentation:
   Enabled: true
   Exclude:
     - 'lib/formatter/date/version.rb'
+    - 'test/**/*'
+
+Style/DateTime:
+  Enabled: true
+  Exclude:
     - 'test/**/*'
 
 # Method
@@ -20,15 +26,11 @@ Style/SingleLineMethods:
 Style/FormatString:
   EnforcedStyle: percent
 
-# Brackets
-Style/SpaceInsideBrackets:
-  Enabled: false
-
 # Hash
-Style/IndentHash:
+Layout/IndentHash:
   EnforcedStyle: consistent
 
-Style/SpaceInsideHashLiteralBraces:
+Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: space
   EnforcedStyleForEmptyBraces: space
 

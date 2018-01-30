@@ -1,9 +1,7 @@
-# encoding: utf-8
-
 require_relative 'test_helper'
 
 class IntegrationTest < Minitest::Test
-  attr_reader :clock, :formatter, :time_zone, :format
+  attr_reader :clock, :time_zone, :format
 
   def setup
     @clock = Time.new 2010, 1, 1, 10, 0, 0, '+00:00'
@@ -86,13 +84,15 @@ class IntegrationTest < Minitest::Test
   end
 
   def test_format_with_custom_string
+    # rubocop:disable Style/FormatStringToken
     @format = '%Y%m%dT%H%M%S%z'
+    # rubocop:enable Style/FormatStringToken
     input = Time.new(2010, 1, 1, 10, 0, 0, '+00:00')
 
     assert_format '20100101T110000+0100', input
   end
 
-  %w(iso8601 xmlschema jisx0301 rfc3339).each do |format|
+  %w[iso8601 xmlschema jisx0301 rfc3339].each do |format|
     define_method :"test_format_with_#{format}" do
       @format = format.to_sym
 

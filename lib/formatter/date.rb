@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'tzinfo'
 require 'delegate'
 
@@ -16,7 +14,7 @@ module Formatter
         when DateTime
           object = object.new_offset Rational(0, 24)
         else
-          fail ArgumentError, "invalid Time or DateTime: #{object.inspect}"
+          raise ArgumentError, "invalid Time or DateTime: #{object.inspect}"
         end
 
         super TZInfo::TimeOrDateTime.wrap(object)
@@ -86,7 +84,7 @@ module Formatter
       when TZInfo::DataTimezone
         @time_zone = time_zone
       else
-        fail ArgumentError, "invalid time zone: #{time_zone.inspect}"
+        raise ArgumentError, "invalid time zone: #{time_zone.inspect}"
       end
     end
 
@@ -100,11 +98,11 @@ module Formatter
         return ->(datetime) { datetime.strftime format }
       end
 
-      fail ArgumentError, "invalid value for format: #{format.inspect}"
+      raise ArgumentError, "invalid value for format: #{format.inspect}"
     end
 
     def format_method?(method)
-      %w(iso8601 xmlschema jisx0301 rfc3339).include? method.to_s
+      %w[iso8601 xmlschema jisx0301 rfc3339].include? method.to_s
     end
 
     def with_offset(time_or_datetime)

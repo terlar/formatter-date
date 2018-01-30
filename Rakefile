@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'bundler/setup'
 require 'bundler/gem_tasks'
 
@@ -10,7 +8,7 @@ RuboCop::RakeTask.new
 
 task default: :test
 task test: 'test:all'
-task ci: %w(rubocop test:all)
+task ci: %w[rubocop test:all]
 
 namespace :test do
   desc 'Run all tests'
